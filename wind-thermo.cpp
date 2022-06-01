@@ -5,7 +5,6 @@
 #include <string>
 
 using namespace std;
-
 // general functions
 
 vector<double> linspace(double low, double up, int size) {
@@ -22,7 +21,7 @@ int write_data(vector<vector<double>> data, int time, int size, double speed)
     ofstream output_file;
     string file_data = "data";
     file_data += to_string((int)round(speed)) + ".txt";
-    cout << "making " << file_data << endl;
+    // cout << "making " << file_data << endl;
     output_file.open(file_data);
     for (int ypos=0; ypos < size; ypos++)
     {
@@ -134,7 +133,7 @@ int main(int argc, char *argv[]) {
 				else {
 					T[t_i][y_i][x_i] = convection(T, dx, dy, dt, D/4, c, t_i, y_i, x_i);
 				}
-				if (y_i == (int)round((size/2) - 1) && x_i == (int)round(size/2)) {
+				if (T[t_i - 1][(int)round(size/2 - 1)][(int)round(size/2)] < 0.2) {
 					write(t[t_i], speed);
 				}
 			}
@@ -142,7 +141,7 @@ int main(int argc, char *argv[]) {
 		}
 		T[t_i][size - 1] = T[t_i - 1][size - 1];
 		if (100*t_i%time == 0) {
-			cout << 100*t_i/time << " % 	speed = " << speed;
+			cout << 100*t_i/time << " % 	speed = " << speed << endl;
 		}
 		if (t_i%((int)round(time/frames)) == 0) {
 
