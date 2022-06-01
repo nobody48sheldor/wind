@@ -35,6 +35,15 @@ int write_data(vector<vector<double>> data, int time, int size, double speed)
     return 0;
 }
 
+int write(double time, double speed)
+{
+    ofstream output_file;
+    output_file.open("time/"+to_string((int)round(speed)));
+    output_file << time << '/' << speed;
+    output_file.close();
+    return 0;
+}
+
 vector<vector<double>> wind(double low, double up, int size, double speed, double low_bound) {
 	vector<vector<double>> wind;
 	wind.resize(size);
@@ -124,6 +133,9 @@ int main(int argc, char *argv[]) {
 				}
 				else {
 					T[t_i][y_i][x_i] = convection(T, dx, dy, dt, D/4, c, t_i, y_i, x_i);
+				}
+				if (y_i == (int)round((size/2) - 1) && x_i == (int)round(size/2)) {
+					write(t[t_i], speed);
 				}
 			}
 			T[t_i][y_i][size - 1] = T[t_i - 1][y_i][size - 1];
