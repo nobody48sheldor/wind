@@ -1,0 +1,9 @@
+#!/bin/sh
+
+g++ wind-thermo.cpp -o wind-thermo
+
+for i in {0..10..5}
+do
+	echo "running wind speed = $i "
+	./wind-thermo $i & ./wind-thermo $(i+1) & ./wind-thermo $(i+2) & ./wind-thermo $(i+3) & ./wind-thermo $(i+4) & ./wind-thermo $(i+5)
+done

@@ -17,10 +17,13 @@ vector<double> linspace(double low, double up, int size) {
 	return array;
 }
 
-int write_data(vector<vector<double>> data, int time, int size)
+int write_data(vector<vector<double>> data, int time, int size, double speed)
 {
     ofstream output_file;
-    output_file.open("data.txt");
+    string file_data = "data";
+    file_data += to_string((int)round(speed)) + ".txt";
+    cout << "making " << file_data << endl;
+    output_file.open(file_data);
     for (int ypos=0; ypos < size; ypos++)
     {
         for (int xpos=0; xpos < size; xpos++)
@@ -57,7 +60,7 @@ vector<vector<double>> T_initial(double low, double up, int size, vector<double>
 	for (int i = 0; i < size; i++) {
 		array[i].resize(size);
 		for (int v = 0; v < size; v++) {
-			array[i][v] = exp(- (20/(up-low)) * (x[v]*x[v] + y[i]*y[i]));
+			array[i][v] = exp(- (24/(up-low)) * (x[v]*x[v] + y[i]*y[i]));
 		}
 	}
 	return array;
@@ -77,7 +80,7 @@ double conduction(vector<vector<vector<double>>> T, double dx, double dy, double
 
 // main
 
-int main() {
+int main(int argc, char *argv[]) {
 
 	// variables
 	
@@ -94,47 +97,46 @@ int main() {
 	
 	//default
 	
-	size = 100, lengh = 2, time = 10000, duration = 1, frames = 100, D = 1, speed = 20, low_bound = 0;
+	size = 40, lengh = 5, time = 5000, duration = 4, frames = 100, D = 1, speed = atof(argv[1]), low_bound = 0;
 	x = linspace(-lengh, lengh, size), y = linspace(-lengh, lengh, size), t = linspace(0, duration, time);
 	c = wind(-lengh, lengh, size, speed, low_bound);
 	dx = x[1]-x[0], dy = dx, dt = t[1]-t[0];
 
-	cout << "r = " << dt/((dx*dx)+(dy*dy) + dy) << endl;
+	// cout << "r = " << dt/((dx*dx)+(dy*dy) + dy) << endl;
 
 	T.resize(time);
 	T[0] = T_initial(-lengh, lengh, size, x, y);
-	write_data(T[0], time, size);
-	system("python3 plot-a-frame.py");
+	write_data(T[0], time, size, speed);
+	// system("python3 plot-a-frame.py");
 
 	
 	// calcualte
 	
 	for (int t_i = 1; t_i < time; t_i++){
-		cout << t_i << endl;
 		T[t_i].resize(size);
 		T[t_i][0] = T[t_i - 1][0];
 		for (int y_i = 1; y_i < (size - 1); y_i++){
 			T[t_i][y_i].resize(size);
 			T[t_i][y_i][0] = T[t_i - 1][y_i][0];
 			for (int x_i = 1; x_i < (size - 1); x_i++){
-				if (x_i < ((2*lengh/(low_bound+lengh))*size) ) {
+				if (x_i < size/2 ) {
 					T[t_i][y_i][x_i] = conduction(T, dx, dy, dt, D, t_i, y_i, x_i);
 				}
 				else {
-					T[t_i][y_i][x_i] = convection(T, dx, dy, dt, D/10, c, t_i, y_i, x_i);
+					T[t_i][y_i][x_i] = convection(T, dx, dy, dt, D/4, c, t_i, y_i, x_i);
 				}
 			}
 			T[t_i][y_i][size - 1] = T[t_i - 1][y_i][size - 1];
 		}
 		T[t_i][size - 1] = T[t_i - 1][size - 1];
 		if (100*t_i%time == 0) {
-			cout << 100*t_i/time << " %";
+			cout << 100*t_i/time << " % 	speed = " << speed;
 		}
 		if (t_i%((int)round(time/frames)) == 0) {
 
-			write_data(T[t_i], time, size);
-			system("python3 plot-a-frame.py");
-			cout << " image " << endl;
+			write_data(T[t_i], time, size, speed);
+			// system("python3 plot-a-frame.py");
+			// cout << " image " << endl;
 		}
 		if (t_i > 5) {
 			// free memory

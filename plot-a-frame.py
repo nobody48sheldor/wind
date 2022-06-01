@@ -7,7 +7,7 @@ import time
 
 style.use('dark_background')
 
-n = 100 
+n = 40 
 
 X = []
 Y = []
