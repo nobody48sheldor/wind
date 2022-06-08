@@ -16,7 +16,7 @@ vector<double> linspace(double low, double up, int size) {
 	return array;
 }
 
-int write_data(vector<vector<double>> data, int time, int size, double speed)
+int write_data(vector<vector<double>> data, int size, double speed)
 {
     ofstream output_file;
     string file_data = "data";
@@ -114,8 +114,8 @@ int main(int argc, char *argv[]) {
 
 	T.resize(time);
 	T[0] = T_initial(-lengh, lengh, size, x, y);
-	write_data(T[0], time, size, speed);
-	// system("python3 plot-a-frame.py");
+	write_data(T[0], size, speed);
+	system("python3 plot-a-frame.py");
 
 	
 	// calcualte
@@ -145,8 +145,8 @@ int main(int argc, char *argv[]) {
 		}
 		if (t_i%((int)round(time/frames)) == 0) {
 
-			write_data(T[t_i], time, size, speed);
-			// system("python3 plot-a-frame.py");
+			write_data(T[t_i], size, speed);
+			system("python3 plot-a-frame.py");
 			// cout << " image " << endl;
 		}
 		if (t_i > 5) {

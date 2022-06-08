@@ -54,5 +54,6 @@ ax.axes.set_ylim3d(bottom=-5, top=5)
 ax.axes.set_zlim3d(bottom=-1.2, top=1.2)
 
 plt.title('Time = 0 secondes')
+plt.show()
 
-plt.savefig("renders/{}.png".format(time.time()))
+# plt.savefig("renders/{}.png".format(time.time()))
