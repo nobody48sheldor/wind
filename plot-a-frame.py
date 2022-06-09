@@ -12,7 +12,7 @@ n = 40
 X = []
 Y = []
 
-with open("data.txt", 'r') as file:
+with open("data10.txt", 'r') as file:
     data = file.readlines()
 
 data = data[0].split("/",n*n)

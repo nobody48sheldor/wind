@@ -37,7 +37,9 @@ int write_data(vector<vector<double>> data, int size, double speed)
 int write(double time, double speed)
 {
     ofstream output_file;
-    output_file.open("time/"+to_string((int)round(speed)));
+    string file_name = "time/"+to_string((int)round(speed));
+    output_file.open(file_name);
+    cout << "making " << file_name << endl;
     output_file << time << '/' << speed;
     output_file.close();
     return 0;
@@ -92,7 +94,7 @@ int main(int argc, char *argv[]) {
 
 	// variables
 	
-	int size, lengh, time, duration, frames;
+	int size, lengh, time, duration, frames, treshold;
 	double dx, dy, dt;
 	double D, speed, low_bound;
 	vector<vector<vector<double>>> T;
@@ -105,7 +107,7 @@ int main(int argc, char *argv[]) {
 	
 	//default
 	
-	size = 40, lengh = 5, time = 5000, duration = 4, frames = 100, D = 1, speed = atof(argv[1]), low_bound = 0;
+	size = 40, lengh = 5, time = 2000, duration = 4, frames = 100, D = 1, treshold=5, speed = atof(argv[1]), low_bound = 0;
 	x = linspace(-lengh, lengh, size), y = linspace(-lengh, lengh, size), t = linspace(0, duration, time);
 	c = wind(-lengh, lengh, size, speed, low_bound);
 	dx = x[1]-x[0], dy = dx, dt = t[1]-t[0];
@@ -133,8 +135,11 @@ int main(int argc, char *argv[]) {
 				else {
 					T[t_i][y_i][x_i] = convection(T, dx, dy, dt, D/4, c, t_i, y_i, x_i);
 				}
-				if (T[t_i - 1][(int)round(size/2 - 1)][(int)round(size/2)] < 0.2) {
+				// if (T[t_i - 1][(int)round(size/2 - 1)][(int)round(size/2)] < 0.3) {
+				if (T[t_i - 1][20][19] < 0.1) {
+          cout << "value below 0.1" << endl;
 					write(t[t_i], speed);
+          system("kill $(pgrep wind)");
 				}
 			}
 			T[t_i][y_i][size - 1] = T[t_i - 1][y_i][size - 1];
@@ -149,7 +154,7 @@ int main(int argc, char *argv[]) {
 			system("python3 plot-a-frame.py");
 			// cout << " image " << endl;
 		}
-		if (t_i > 5) {
+		if (t_i > treshold) {
 			// free memory
 			vector<double> T[t_i - 5];
 		}

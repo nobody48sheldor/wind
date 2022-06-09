@@ -6,12 +6,14 @@ g++ wind-thermo.cpp -o wind-thermo
 echo 
 echo running...
 echo 
-# ./wind-thermo
+./wind-thermo 10
 
 echo Do you want to keep the renders ? [Y/n]  
 read rep
 
-if $rep == "N" or "n":
+if [ $rep == "N" or "n" ]:
+then
 	rm renders/*.png
 else:
-	echo ok !
+	echo "ok !"
+fi
