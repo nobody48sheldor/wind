@@ -11,7 +11,7 @@ echo
 echo Do you want to keep the renders ? [Y/n]  
 read rep
 
-if [ $rep == "N" or "n" ]:
+if [ $rep == "n" ]:
 then
 	rm renders/*.png
 else:

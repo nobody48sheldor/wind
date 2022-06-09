@@ -37,9 +37,9 @@ int write_data(vector<vector<double>> data, int size, double speed)
 int write(double time, double speed)
 {
     ofstream output_file;
-    string file_name = "time/"+to_string((int)round(speed));
-    output_file.open(file_name);
+    string file_name = "time-"+to_string((int)round(speed))+".txt";
     cout << "making " << file_name << endl;
+    output_file.open(file_name);
     output_file << time << '/' << speed;
     output_file.close();
     return 0;
